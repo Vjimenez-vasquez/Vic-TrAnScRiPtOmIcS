@@ -18,9 +18,16 @@ fastqc * ;
 ls ;
 
 ## 2. run TRINITY ##
+mkdir fasta/ fasta.gene_trans_map/ timing/ ;
 for s1 in *.gz
 do
 s2=$(basename $s1 .fastq.gz)
 Trinity --seqType fq --max_memory 12G --single $s1 --CPU 4 --output ${s2}.trinity.out ;
+mv ${s2}.trinity.out/Trinity.fasta ${s2}.trinity.out/${s2}.Trinity.fasta ;
+mv ${s2}.trinity.out/Trinity.fasta.gene_trans_map ${s2}.trinity.out/${s2}.Trinity.fasta.gene_trans_map ;
+mv ${s2}.trinity.out/Trinity.timing ${s2}.trinity.out/${s2}.Trinity.timing ;
+mv ${s2}.trinity.out/${s2}.Trinity.fasta fasta/ ;
+mv ${s2}.trinity.out/${s2}.Trinity.fasta.gene_trans_map fasta.gene_trans_map/ ;
+mv ${s2}.trinity.out/${s2}.Trinity.timing timing/;
 done
 ls ;
