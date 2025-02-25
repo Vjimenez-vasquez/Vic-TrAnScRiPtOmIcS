@@ -1,5 +1,10 @@
 # Vic-TrAnScRiPtOmIcS
 A SUMMARY OF CODES FOR TRANSCRIPTOME ASSEMBLY
+##### Table of Contents  
+[REQUIREMENTS(#REQUIREMENTS)  
+[1. download FASTQ from SRA](#1. download FASTQ from SRA)  
+...snip...    
+<a name="headers"/>
 ## 0. REQUIREMENTS
 ```r
 ## consideraciones ##
