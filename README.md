@@ -20,13 +20,14 @@ prefetch --max-size 50G --option-file list.txt ;
 mv */*.sra . ;
 # fasterq-dump --split-files *.sra ; #
 fastq-dump --defline-seq '@$sn[_$rn]/$ri' --split-files *.sra 
-gzip *fastq ;
+gzip -t 12 *fastq ;
 fastqc * ;
 ls ;
 ```
 
 ## 2. run TRINITY ##
 ```r
+mkdir fasta/ fasta.gene_trans_map/ timing/ ;
 for s1 in *.gz
 do
 s2=$(basename $s1 .fastq.gz)
@@ -39,5 +40,4 @@ mv ${s2}.trinity.out/${s2}.Trinity.fasta.gene_trans_map fasta.gene_trans_map/ ;
 mv ${s2}.trinity.out/${s2}.Trinity.timing timing/;
 done
 ls ;
-
 ```
