@@ -41,3 +41,42 @@ mv ${s2}.trinity.out/${s2}.Trinity.timing timing/;
 done
 ls ;
 ```
+
+
+## 2.1. compress very large FASTQ files ##
+```r
+# 2.1.1 #
+for t1 in *.sra
+do
+prefix=$(basename $t1 .sra)
+./fastq-dump --defline-seq '@$sn[_$rn]/$ri' --split-files $t1 
+rm $t1 ; 
+done 
+ls ; 
+
+# 2.1.2 #
+
+for r1 in *_1.fastq
+do
+r2=$(basename $r1 _1.fastq)
+echo "vic, starting with sample $r2"
+
+echo "vic, don't be ass, I'm compressing file ${r2}_1.fastq"
+cat ${r2}_1.fastq | parallel --pipe --recend '' gzip -9 > ${r2}_1.fastq.gz ;
+chmod 777 ${r2}_1.fastq.gz ;
+rm ${r2}_1.fastq ; 
+echo "vic, sample ${r2}_1.fastq was removed"
+
+echo "vic, don't be ass, I'm compressing file ${r2}_2.fastq" 
+cat ${r2}_2.fastq | parallel --pipe --recend '' gzip -9 > ${r2}_2.fastq.gz ;
+chmod 777 ${r2}_2.fastq.gz ;
+rm ${r2}_2.fastq ; 
+echo "vic, sample ${r2}_2.fastq was removed"
+
+echo "vic, done FORWARD and REVERSE for sample ${r2}, moving to next sample"
+echo "..."
+done 
+
+echo "no more samples, all files were sucessfully compressed"
+ls ;
+```
