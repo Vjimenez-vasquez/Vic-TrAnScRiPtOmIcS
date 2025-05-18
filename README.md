@@ -59,6 +59,9 @@ y los nuevos FASTQ-FILES tendrán la extensión "paired2.fq.gz" que serán proce
 
 ## 3. run TRINITY ##
 ```r
+
+## para single-end
+
 mkdir fasta/ fasta.gene_trans_map/ timing/ ;
 for s1 in *.gz
 do
@@ -72,6 +75,8 @@ mv ${s2}.trinity.out/${s2}.Trinity.fasta.gene_trans_map fasta.gene_trans_map/ ;
 mv ${s2}.trinity.out/${s2}.Trinity.timing timing/;
 done
 ls ;
+
+## para paired-end
 
 mkdir fasta/ fasta.gene_trans_map/ timing/ ;
 for r1 in *_f_paired2.fq.gz
