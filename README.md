@@ -10,8 +10,12 @@ A SUMMARY OF CODES FOR TRANSCRIPTOME ASSEMBLY
 ## ingresa a la pestana "files" ##
 ## encontraras archivos con nombre "linux-64/samtools-1.3.1-h60f3df9_12.tar.bz2" ##
 ## el enlace es https://anaconda.org/bioconda/samtools/1.3.1/download/linux-64/samtools-1.3.1-h60f3df9_12.tar.bz2 ##
-## TRINITY requiere que todo el contenido de "bin" (sobre todo "samtools") se encuentre en "/home/hp/anaconda3/envs/trinity/bin"
+## TRINITY requiere que todo el contenido de "bin" (sobre todo "samtools") se encuentre en "/home/hp/anaconda3/envs/trinity/bin" ##
 ## corrobora que "samtools" dentro de esta carpeta es la version 1.3 ##
+## puede detectarse algun error con "salmon" ##
+## instalar "tbb" en el environment de Trinity ##
+## conda install -c bioconda tbb=2020.2 ##
+
 ```
 
 ## 1. download FASTQ from SRA ##
@@ -23,6 +27,32 @@ fastq-dump --defline-seq '@$sn[_$rn]/$ri' --split-files *.sra
 gzip -t 12 *fastq ;
 fastqc * ;
 ls ;
+```
+
+## 2. Trinity requiere que los reads presenten la denominación @1/1 y @1/2, donde el número a la izquiera de "/" denota el número de read en el fastq-file y el número a la derecha de "/" debe ser "1" para forward y "2" para reverse, para ello se puede emplear el siguiente comando ##
+```r
+por ejemplo, si los 3 primeros reads del fastq forward "SRR7003713_f_paired.fq.gz" tienen los siguientes headers
+
+@SRR7003713.5 5 length=125
+@SRR7003713.8 8 length=125
+@SRR7003713.12 12 length=125
+
+despues de correr el comando 
+
+for r1 in *_f_paired.fq.gz
+do
+prefix=$(basename $r1 _f_paired.fq.gz)
+r2=${prefix}_r_paired.fq.gz
+zcat $r1 | sed -e "s/^@${prefix}./@/g" | sed -e 's/\ .*/\/1/g' > ${prefix}_f_paired2.fq ;
+zcat $r2 | sed -e "s/^@${prefix}./@/g" | sed -e 's/\ .*/\/2/g' > ${prefix}_r_paired2.fq ;
+done ; 
+gzip *2.fq ;
+ls -lh *.gz ;
+
+se obtendran los nuevos headers
+@5/1
+@8/1
+@12/1
 ```
 
 ## 2. run TRINITY ##
