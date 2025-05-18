@@ -53,9 +53,11 @@ se obtendran los nuevos headers
 @5/1
 @8/1
 @12/1
+
+y los nuevos FASTQ-FILES tendrán la extensión "paired2.fq.gz" que serán procesados por "Trinity"
 ```
 
-## 2. run TRINITY ##
+## 3. run TRINITY ##
 ```r
 mkdir fasta/ fasta.gene_trans_map/ timing/ ;
 for s1 in *.gz
@@ -70,12 +72,26 @@ mv ${s2}.trinity.out/${s2}.Trinity.fasta.gene_trans_map fasta.gene_trans_map/ ;
 mv ${s2}.trinity.out/${s2}.Trinity.timing timing/;
 done
 ls ;
+
+mkdir fasta/ fasta.gene_trans_map/ timing/ ;
+for r1 in *_f_paired2.fq.gz
+do
+prefix=$(basename $r1 _f_paired2.fq.gz)
+r2=${prefix}_r_paired2.fq.gz
+Trinity --seqType fq --max_memory 28G --right $r1 --left $r2 --CPU 14 --output ${prefix}.trinity.out ;
+mv ${prefix}.trinity.out/Trinity.fasta ${prefix}.trinity.out/${prefix}.Trinity.fasta ;
+mv ${prefix}.trinity.out/Trinity.fasta.gene_trans_map ${prefix}.trinity.out/${prefix}.Trinity.fasta.gene_trans_map ;
+mv ${prefix}.trinity.out/Trinity.timing ${prefix}.trinity.out/${prefix}.Trinity.timing ;
+mv ${prefix}.trinity.out/${prefix}.Trinity.fasta fasta/ ;
+mv ${prefix}.trinity.out/${prefix}.Trinity.fasta.gene_trans_map fasta.gene_trans_map/ ;
+mv ${prefix}.trinity.out/${prefix}.Trinity.timing timing/;
+done ;
+ls ;
 ```
 
-
-## 2.1. compress very large FASTQ files ##
+## 3.1. compress very large FASTQ files ##
 ```r
-# 2.1.1 #
+# 3.1.1 #
 for t1 in *.sra
 do
 prefix=$(basename $t1 .sra)
@@ -84,7 +100,7 @@ rm $t1 ;
 done 
 ls ; 
 
-# 2.1.2 #
+# 3.1.2 #
 
 for r1 in *_1.fastq
 do
